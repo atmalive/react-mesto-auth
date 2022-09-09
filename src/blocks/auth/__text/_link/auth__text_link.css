@@ -1,0 +1,12 @@
+.auth__text_link {
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.auth__text_link:hover {
+    opacity: 0.85;
+}
+
+.auth__text_link:active {
+    font-size: 19px;
+}
