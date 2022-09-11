@@ -1,3 +1,4 @@
+import {checkResponse} from "./checkResponse";
 
 export const BASE_URL = 'https://auth.nomoreparties.co'
 
@@ -13,12 +14,7 @@ export const register = (email, password) => {
             "email": email
         })
     })
-        .then((response) => {
-            if (!response.ok) {
-                return Promise.reject(`Произошла ошибка ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(checkResponse)
 };
 
 
@@ -33,16 +29,11 @@ export const signin = (email, password) => {
             "email": email
         })
     })
-        .then((response) => {
-            if (!response.ok) {
-                return Promise.reject(`Произошла ошибка ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(checkResponse)
 }
 
 
-export const authentication = (jwt) => {
+export const checkToken = (jwt) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {
@@ -50,10 +41,5 @@ export const authentication = (jwt) => {
             "Authorization" : `Bearer ${jwt}`
         },
     })
-        .then((response) => {
-            if (!response.ok) {
-                return Promise.reject(`Произошла ошибка ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(checkResponse)
 }

@@ -1,4 +1,4 @@
-import {PopupWithForm} from "./PopupWithForm";
+import { PopupWithForm } from "./PopupWithForm";
 
 export function ConfirmDeleteCardPopup({ isOpen, isButtonBlocked, handleClose, handleDelete }) {
 

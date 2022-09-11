@@ -1,22 +1,19 @@
 import {PopupWithForm} from "./PopupWithForm";
-import React from "react";
+import React from 'react'
+import {useForm} from "../hooks/useForm";
 
 export function EditAvatarPopup({ isButtonBlocked, isOpen, handleClose, onUpdateAvatar}) {
 
-    const [ name, setName ] = React.useState('');
-
-    const handleChange = (e) => {
-        setName(e.target.value)
-    }
+    const {values, handleChange, setValues} = useForm({});
 
     React.useEffect(() => {
-        setName('');
+        setValues({submitAvatarLink: ''});
     }, [isOpen]);
 
     function handleSubmit(e) {
         e.preventDefault();
         onUpdateAvatar({
-            avatar: name,
+            avatar: values.submitAvatarLink,
         });
     }
 
@@ -31,7 +28,7 @@ export function EditAvatarPopup({ isButtonBlocked, isOpen, handleClose, onUpdate
         >
             <label className="popup__label">
                 <input
-                    value={name}
+                    value={values.submitAvatarLink || ''}
                     onChange={handleChange}
                     className="popup__input popup__input_avatar popup__input_avatar_link"
                     name="submitAvatarLink"

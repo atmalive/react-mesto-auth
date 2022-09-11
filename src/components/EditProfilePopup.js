@@ -1,36 +1,35 @@
 import {PopupWithForm} from "./PopupWithForm";
 import React, {useContext} from "react";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
+import {useForm} from "../hooks/useForm";
 
 export function EditProfilePopup({isOpen, handleClose, onUpdateUser, isButtonBlocked}) {
     const user = useContext(CurrentUserContext)
-    const [ name, setName ] = React.useState('');
-    const [ description , setDescription ] = React.useState('');
+    // const [ name, setName ] = useState('');
+    // const [ description , setDescription ] = useState('');
+
+    const {values, handleChange, setValues} = useForm({});
 
     React.useEffect(() => {
         if(user) {
         const { name: userName, about } = user;
-        setName(userName);
-        setDescription(about);
+            setValues({submitPopupName: userName, submitPopupJob: about, ...values, });
         }
-    }, [user])
+    }, [user, isOpen])
 
     const handleSubmit = (e) => {
         e.preventDefault();
         onUpdateUser({
-            name,
-            about: description,
-        });
+        name: values.submitPopupName, about: values.submitPopupJob
+        })
     }
 
    return(
            <PopupWithForm isButtonBlocked={isButtonBlocked} onSubmit={handleSubmit} title={'Редактировать профиль'} name={'info'} isOpen={isOpen} handleClose={handleClose}>
                <label className="popup__label">
                    <input
-                       value={name}
-                       onChange={ (e) => {
-                           setName(e.target.value)
-                       }}
+                       value={values.submitPopupName || ''}
+                       onChange={handleChange}
                        className="popup__input popup__input_type_name"
                        name="submitPopupName"
                        placeholder="Имя"
@@ -42,10 +41,8 @@ export function EditProfilePopup({isOpen, handleClose, onUpdateUser, isButtonBlo
                </label>
                <label className="popup__label">
                    <input
-                       value={description}
-                       onChange={ (e) => {
-                           setDescription(e.target.value)
-                       }}
+                       value={values.submitPopupJob || ''}
+                       onChange={handleChange}
                        className="popup__input popup__input_type_job"
                        name="submitPopupJob"
                        placeholder="Занятие"

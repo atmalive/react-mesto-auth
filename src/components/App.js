@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {Route, Switch, useHistory} from "react-router-dom";
+import { Route, Switch, useHistory} from "react-router-dom";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/Api";
 import {Header} from './Header'
@@ -14,7 +14,7 @@ import {ProtectedRoute} from "./ProtectedRoute";
 import {Login} from "./Login";
 import {Register} from "./Register";
 import {InfoTooltip} from "./InfoTooltip";
-import {authentication, register, signin} from "./MestoAuth";
+import {checkToken, register, signin} from "../utils/MestoAuth";
 
 export default function App() {
 
@@ -23,7 +23,7 @@ export default function App() {
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
     const [isConfirmDeletePopupOpen, setIsConfirmDeletePopupOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const [currentUser, setCurrentUser ] = useState();
+    const [currentUser, setCurrentUser ] = useState(null);
     const [isButtonBlocked, setIsButtonBlocked] = useState(false);
     const [cards, setCards] = useState([]);
     const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)
@@ -31,6 +31,22 @@ export default function App() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [ email, setEmail] = useState('')
     const [ isRegisterError, setIsRegisterError ] = useState(false)
+    const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard
+
+    useEffect(() => {
+        const closeByEscape = (evt) => {
+            if(evt.key === 'Escape') {
+                closeAllPopups();
+            }
+        }
+        if(isOpen) {
+            document.addEventListener('keydown', closeByEscape);
+            return () => {
+                document.removeEventListener('keydown', closeByEscape);
+            }
+        }
+    }, [isOpen])
+
 
     const history = useHistory()
 
@@ -45,7 +61,7 @@ export default function App() {
         const token = localStorage.getItem('token')
 
           if (token) {
-              authentication(token)
+              checkToken(token)
                   .then((data) =>{
                       if (data) {
                           setEmail(data.data.email)
@@ -53,8 +69,11 @@ export default function App() {
                           history.push('/')
                       }
                   })
+                  .catch(err => {
+                      console.log(err);
+                  });
           }
-    }, [])
+    },[])
 
     useEffect(() => {
         if (loggedIn) {
@@ -169,14 +188,15 @@ export default function App() {
 
     const regPerson = (email, password) => {
         register(email, password)
-            .then((data) => {
+            .then(() => {
                 setIsRegisterError(false)
-                setIsInfoTooltipOpen(true)
             })
             .catch((err) => {
                 setIsRegisterError(true)
-                setIsInfoTooltipOpen(true)
                 console.log(err)
+            })
+            .finally(() => {
+                setIsInfoTooltipOpen(true)
             })
     }
 

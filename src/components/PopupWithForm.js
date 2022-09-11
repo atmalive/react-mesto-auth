@@ -3,7 +3,7 @@ export function PopupWithForm({title, name, children, isOpen, handleClose, onSub
         <div className={`popup popup_type_${name} ${isOpen && "popup_open"}`}>
             <div className="popup__container">
                 <h3 className="popup__text">{title}</h3>
-                <form onSubmit={onSubmit} className={`popup__inputs popup__inputs_type_${name}`} name={`submit${name}`} noValidate>
+                <form onSubmit={onSubmit} className={`popup__inputs popup__inputs_type_${name}`} name={`submit${name}`}>
                     {children}
                     <button disabled={isButtonBlocked} className={`popup__button ${isButtonBlocked && 'popup__button_inactive'}`} type="submit">{textButton}</button>
                 </form>

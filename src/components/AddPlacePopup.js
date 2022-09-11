@@ -1,21 +1,20 @@
 import {PopupWithForm} from "./PopupWithForm";
 import React from "react";
+import {useForm} from "../hooks/useForm";
 
 export function AddPlacePopup({ isOpen, onAddPlace, handleClose, isButtonBlocked}) {
 
-    const [ name, setName ] = React.useState('')
-    const [ link, setLink ] = React.useState('')
+    const {values, handleChange, setValues} = useForm({});
 
     React.useEffect(() => {
-        setName('');
-        setLink('');
+        setValues({submitCardName: '', submitCardLink: ''});
     }, [isOpen]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         onAddPlace(
-            name,
-            link
+            values.submitCardName,
+            values.submitCardLink
         );
     }
 
@@ -23,10 +22,8 @@ export function AddPlacePopup({ isOpen, onAddPlace, handleClose, isButtonBlocked
         <PopupWithForm title={'Новое место'} name={'card'} isOpen={isOpen} onSubmit={handleSubmit} handleClose={handleClose} isButtonBlocked={isButtonBlocked}>
             <label className="popup__label">
                 <input
-                    value={name}
-                    onChange={ (e) => {
-                        setName(e.target.value)
-                    }}
+                    value={values.submitCardName || ''}
+                    onChange={handleChange}
                     className="popup__input popup__input_mesto popup__input_mesto_name"
                     name="submitCardName"
                     placeholder="Название"
@@ -38,10 +35,8 @@ export function AddPlacePopup({ isOpen, onAddPlace, handleClose, isButtonBlocked
             </label>
             <label className="popup__label">
                 <input
-                    value={link}
-                    onChange={ (e) => {
-                        setLink(e.target.value)
-                    }}
+                    value={values.submitCardLink || ''}
+                    onChange={handleChange}
                     className="popup__input popup__input_mesto popup__input_mesto_link"
                     name="submitCardLink"
                     placeholder="Ссылка на картинку"

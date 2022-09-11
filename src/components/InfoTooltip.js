@@ -14,7 +14,7 @@ export function InfoTooltip({ isOpen, isRegisterError, handleClose }) {
                     type="button"
                     aria-label="close popup">
                 </button>
-                <img src={ isRegisterError ? fail : success} className="popup__img-tooltip"/>
+                <img src={ isRegisterError ? fail : success} className="popup__img-tooltip" alt="Картинка"/>
                 <p className="popup__text popup__text_tooltip">{isRegisterError ? 'Что-то пошло не так!' +
                     'Попробуйте ещё раз.' : 'Вы успешно зарегистрировались!'}</p>
             </div>

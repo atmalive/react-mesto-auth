@@ -19,8 +19,7 @@ export function Main(props) {
     const { about, name, avatar } = currentUserContext || {};
 
     return (
-        <>
-            <main className="main">
+             <main className="main">
                 <section className="profile">
                     <div onClick={onEditAvatar}
                          className="profile__avatar" style={{ backgroundImage: `url(${avatar})` }}/>
@@ -49,6 +48,5 @@ export function Main(props) {
                     })}
                 </section>
             </main>
-        </>
     )
 }
